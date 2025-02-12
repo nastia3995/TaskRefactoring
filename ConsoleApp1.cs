@@ -73,10 +73,10 @@ static Student EnterStudentInfo()
         }
         static void Main(string[] args)
         {
-            Applicant applicant = new Applicant();
-            Student student = new Student();
-            Professor professor = new Professor();
-            LibraryUser libraryUser = new LibraryUser();
+            Applicant applicant = null;
+            Student student = null;
+            Professor professor = null;
+            LibraryUser libraryUser = null;
             int n;
 
             var actions = new Dictionary<int, Action>{
