@@ -78,6 +78,18 @@ static Student EnterStudentInfo()
             Professor professor = new Professor();
             LibraryUser libraryUser = new LibraryUser();
             int n;
+
+            var actions = new Dictionary<int, Action>{
+                {1, ()=>applicant = EnterApplicantInfo();},
+                {2, ()=> student = EnterStudentInfo();},
+                {3, ()=> professor = EnterProfessorInfo();},
+                {4, ()=> libraryUser = EnterLibraryUserInfo();},
+                {5, ()=>applicant?.ShowInfo();},
+                {6, ()=>student?.ShowInfo();},
+                {7, ()=>professor?.ShowInfo();},
+                {8, ()=>libraryUser?.ShowInfo();}
+                
+            };
             do
             {
                 Console.Write("Enter 1 to enter applicant info\nEnter 2 to enter student info\nEnter 3 to enter professor`s info\n" +
@@ -85,33 +97,8 @@ static Student EnterStudentInfo()
                     "Enter 8 to see library user info\nEnter 0 to exit\n");
                
                 int.TryParse(Console.ReadLine(), out n);
-                switch (n)
-                {
-                    case 0: break;
-                    case 1:
-                        applicant = EnterApplicantInfo();
-                        break;
-                    case 2:
-                        student = EnterStudentInfo();
-                        break;
-                    case 3:
-                        professor = EnterProfessorInfo();
-                        break;
-                    case 4:
-                        libraryUser = EnterLibraryUserInfo();
-                        break;
-                    case 5:
-                        applicant.ShowInfo();
-                        break;
-                    case 6:
-                        student.ShowInfo();
-                        break;
-                    case 7:
-                        professor.ShowInfo();
-                        break;
-                    case 8:
-                        libraryUser.ShowInfo();
-                        break;
+                if(actions.ContainsKey(n)){
+                actions[n].Evoke();
                 }
             } while (n != 0);
         }
