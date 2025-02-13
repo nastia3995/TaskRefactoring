@@ -100,10 +100,6 @@ namespace ClassLibrary1
                 return birthYear;
             }
         }
-        public virtual void ShowInfo()
-        {
-            Console.WriteLine($"Name:{name}\nSurname:{surname}\nDate of birth: {birthDay}:{birthMonth}:{birthYear}");
-        }
     }
     public class Applicant:Person
     {
@@ -150,11 +146,6 @@ namespace ClassLibrary1
             {
                 return schoolName;
             }
-        }
-        public override void ShowInfo()
-        {
-            base.ShowInfo();
-            Console.WriteLine($"Final exam grade:{finalExamGrade}\nSchool grade:{schoolGrade}\nUniversity: {schoolName}");
         }
     }
     public class Student : Person
@@ -211,11 +202,6 @@ namespace ClassLibrary1
                 return universityName;
             }
         }
-        public override void ShowInfo()
-        {
-            base.ShowInfo();
-            Console.WriteLine($"Course:{course}\n:Group: {group}\nFaculty: {faculty}\nUniversity: {universityName}");
-        }
     }
     
     public class Professor : Person
@@ -266,11 +252,6 @@ namespace ClassLibrary1
                 return universityName;
             }
         }
-        public override void ShowInfo()
-        {
-            base.ShowInfo();
-            Console.WriteLine($"Position:{position}\n:Chair: {chair}\nUniversity: {universityName}\n");
-        }
     }
     public class LibraryUser : Person
     {
@@ -288,10 +269,100 @@ namespace ClassLibrary1
         }
         public DateTime issue { set; get; }
         public int cost {  set; get; }
-        public override void ShowInfo()
+    }
+    public static class UserInput
+{
+    public static string GetString(string message)
+    {
+        Console.Write(message);
+        return Console.ReadLine();
+    }
+
+    public static int GetInt(string message)
+    {
+        int value;
+        while (true)
         {
-            base.ShowInfo();
-            Console.WriteLine($"Reader card number:{idReaderCard}\n:Issue date: {issue}\nMonthly cost: {cost}\n");
+            Console.Write(message);
+            if (int.TryParse(Console.ReadLine(), out value))
+                return value;
+            Console.WriteLine("Ошибка: введите целое число!");
         }
     }
+
+    public static DateTime GetDate(string message)
+    {
+        DateTime date;
+        while (true)
+        {
+            Console.Write(message);
+            string input = Console.ReadLine();
+            if (DateTime.TryParseExact(input, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                return date;
+            Console.WriteLine("Ошибка: введите дату в формате dd.MM.yyyy!");
+        }
+    }
+}
+public static class DataValidator
+{
+    public static bool IsValidName(string name)
+    {
+        return !string.IsNullOrWhiteSpace(name) && name.Length >= 2;
+    }
+}
+public static class EntityFactory
+{
+    public static Student CreateStudent()
+    {
+        string name = UserInput.GetString("Enter name of the student: ");
+        string surname = UserInput.GetString("Enter surname of the student: ");
+        int birthday = UserInput.GetInt("Enter day of birth: ");
+        int birthMonth = UserInput.GetInt("Enter month of birth: ");
+        int birthYear = UserInput.GetInt("Enter year of birth: ");
+        int course = UserInput.GetInt("Enter year of studying: ");
+        string group = UserInput.GetString("Enter name of the group: ");
+        string faculty = UserInput.GetString("Enter name of the faculty: ");
+        string university = UserInput.GetString("Enter name of the university: ");
+        return new Student(name, surname, birthday, birthMonth, birthYear, course, group, faculty, university);
+    }
+
+    public static Applicant CreateApplicant()
+    {
+        string name = UserInput.GetString("Enter name of the applicant: ");
+        string surname = UserInput.GetString("Enter surname of the applicant: ");
+        int birthday = UserInput.GetInt("Enter day of birth: ");
+        int birthMonth = UserInput.GetInt("Enter month of birth: ");
+        int birthYear = UserInput.GetInt("Enter year of birth: ");
+        int finalExamGrade = UserInput.GetInt("Enter the ZNO grade: ");
+        int schoolGrade = UserInput.GetInt("Enter the number of points for a document: ");
+        string schoolName = UserInput.GetString("Enter name of the school: ");
+        return new Applicant(name, surname, birthday, birthMonth, birthYear, finalExamGrade, schoolGrade, schoolName);
+    }
+
+    public static Professor CreateProfessor()
+    {
+        string name = UserInput.GetString("Enter name of the professor: ");
+        string surname = UserInput.GetString("Enter surname of the professor: ");
+        int birthday = UserInput.GetInt("Enter day of birth: ");
+        int birthMonth = UserInput.GetInt("Enter month of birth: ");
+        int birthYear = UserInput.GetInt("Enter year of birth: ");
+        string position = UserInput.GetString("Enter position: ");
+        string chair = UserInput.GetString("Enter chair name: ");
+        string university = UserInput.GetString("Enter university name: ");
+        return new Professor(name, surname, birthday, birthMonth, birthYear, position, chair, university);
+    }
+
+    public static LibraryUser CreateLibraryUser()
+    {
+        string name = UserInput.GetString("Enter name of the library user: ");
+        string surname = UserInput.GetString("Enter surname of the library user: ");
+        int birthday = UserInput.GetInt("Enter day of birth: ");
+        int birthMonth = UserInput.GetInt("Enter month of birth: ");
+        int birthYear = UserInput.GetInt("Enter year of birth: ");
+        DateTime issueDate = UserInput.GetDate("Enter issue date (dd.MM.yyyy): ");
+        int idReaderCard = UserInput.GetInt("Enter reader card id: ");
+        int cost = UserInput.GetInt("Enter monthly cost: ");
+        return new LibraryUser(name, surname, birthday, birthMonth, birthYear, idReaderCard, issueDate, cost);
+    }
+}
 }
